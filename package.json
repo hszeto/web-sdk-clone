@@ -1,0 +1,24 @@
+{
+  "author": "Gimbal",
+  "description": "Gimbal On-The-Way web javascript SDK",
+  "devDependencies": {
+    "@babel/core": "^7.13.8",
+    "@babel/preset-env": "^7.13.9",
+    "@babel/register": "^7.13.8",
+    "chai": "^4.3.3",
+    "mocha": "^8.3.0",
+    "sinon": "^9.2.4",
+    "sinon-chai": "^3.5.0"
+  },
+  "keywords": [
+    "Gimbal",
+    "on-the-way"
+  ],
+  "license": "ISC",
+  "main": "src/index.js",
+  "name": "gimbal-web-sdk",
+  "scripts": {
+    "test": "mocha"
+  },
+  "version": "0.0.1"
+}

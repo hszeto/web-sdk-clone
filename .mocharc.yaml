@@ -1,0 +1,6 @@
+# Setup Babel for Mocha
+# https://babeljs.io/setup#installation
+# Select "Mocha" in "Test frameworks"
+
+require:
+  - '@babel/register'
