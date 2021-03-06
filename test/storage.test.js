@@ -8,7 +8,7 @@ describe('Storage', () => {
     context('when cookie is present', () => {
       beforeEach(() => {
         global.document = {
-          cookie: 'gimbal-public-key=GimbalPublicKey-123'
+          cookie: 'gimbal-public-key=GimbalTestPublicKey-123'
         };
       });
 
@@ -20,7 +20,7 @@ describe('Storage', () => {
 
       it('should return the cookie', () => {
         expect(Cookie.get('gimbal-public-key'))
-          .to.eql('gimbal-public-key=GimbalPublicKey-123')
+          .to.eql('gimbal-public-key=GimbalTestPublicKey-123')
       });
     });
 

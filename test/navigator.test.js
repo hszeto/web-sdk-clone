@@ -25,24 +25,24 @@ describe('Navigator', () => {
         global.navigator = undefined;
       });
 
-      it('should return latitude, longitude, accuracy', () => {
+      it('should return latitude, longitude, accuracy', () =>
         Navigator.getPosition()
           .then(({ latitude, longitude, accuracy }) => {
             expect(latitude).to.equal(12.345)
             expect(longitude).to.equal(67.89)
             expect(accuracy).to.equal(23)
           })
-      });
+      );
     });
 
     describe('fail', () => {
       context('when the platform does not support navigator', () => {
-        it('should return an error message', () => {
+        it('should return an error message', () =>
           Navigator.getPosition()
             .catch(error => {
-              expect(error).to.equal({ message: 'Your platform is not supported.'});
+              expect(error).to.eql({ message: 'Your platform is not supported.'});
             })
-        });
+        );
       });
 
       context('when position not found', () => {
@@ -60,12 +60,12 @@ describe('Navigator', () => {
           global.navigator = undefined;
         });
 
-        it('should return an error message', () => {
+        it('should return an error message', () =>
           Navigator.getPosition()
             .catch(error => {
-              expect(error).to.equal({ message: 'Cannot find your position.'});
+              expect(error).to.eql({ message: 'Cannot find your position.'});
             })
-        });
+        );
       });
 
       context('when permission denied', () => {
@@ -85,12 +85,12 @@ describe('Navigator', () => {
           global.navigator = undefined;
         });
 
-        it('should return an error message', () => {
+        it('should return an error message', () =>
           Navigator.getPosition()
             .catch(error => {
-              expect(error).to.equal({ message: 'Permission Denied!'});
+              expect(error).to.eql({ message: 'Permission Denied!'});
             })
-        });
+        );
       });
 
       context('when there is an error', () => {
@@ -110,12 +110,12 @@ describe('Navigator', () => {
           global.navigator = undefined;
         });
 
-        it('should return an error message', () => {
+        it('should return an error message', () =>
           Navigator.getPosition()
             .catch(error => {
-              expect(error).to.equal({ message: 'ERROR' });
+              expect(error).to.eql({ message: 'ERROR' });
             })
-        });
+        );
       });
     });
   });

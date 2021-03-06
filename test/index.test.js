@@ -64,13 +64,13 @@ describe('Gimbal', () => {
 
   describe('start', () => {
     context('when success', () => {
-      before(() => {
+      beforeEach(() => {
         global.document = {
-          cookie: 'gimbal-public-key=GimbalPublicKey-123'
+          cookie: 'gimbal-public-key=GimbalTestPublicKey-123'
         };
 
         sinon.stub(Navigator, 'getPosition')
-          .resolves(null, {
+          .resolves({
             latitude: 12.345,
             longitude: 23.45,
             accuracy: 22
@@ -85,23 +85,33 @@ describe('Gimbal', () => {
         Navigator.getPosition.restore();
       });
 
-      it('should return latitude, longitude, accuracy', () => {
-        Gimbal.start((err, { latitude, longitude, accuracy }) => {
-          expect(latitude).to.equal(12.345);
-          expect(longitude).to.equal(23.45);
-          expect(accuracy).to.equal(22);
-        })
-      });
+      it('should return latitude', () =>
+        Gimbal.start((err, { latitude, longitude, accuracy }) =>
+          expect(latitude).to.equal(12.345)
+        )
+      );
+
+      it('should return longitude', () =>
+        Gimbal.start((err, { latitude, longitude, accuracy }) =>
+          expect(longitude).to.equal(23.45)
+        )
+      );
+
+      it('should return accuracy', () =>
+        Gimbal.start((err, { latitude, longitude, accuracy }) =>
+          expect(accuracy).to.equal(22)
+        )
+      );
     });
 
     context('when fail', () => {
-      before(() => {
+      beforeEach(() => {
         global.document = {
-          cookie: 'gimbal-public-key=GimbalPublicKey-123'
+          cookie: 'gimbal-public-key=GimbalTestPublicKey-123'
         };
 
         sinon.stub(Navigator, 'getPosition')
-          .rejects({ message: 'ERROR' }, null)
+          .rejects({ message: 'ERROR' })
       });
 
       afterEach(() => {
@@ -112,15 +122,15 @@ describe('Gimbal', () => {
         Navigator.getPosition.restore();
       });
 
-      it('should return an error message', () => {
-        Gimbal.start((err, _) => {
-          expect(err).to.equal({ message: 'ERROR' });
-        })
-      });
+      it('should return an error message', () =>
+        Gimbal.start((err, _) =>
+          expect(err).to.eql({ message: 'ERROR' })
+        )
+      );
     });
 
     context('when the Gimbal Public Key is missing', () => {
-      before(() => {
+      beforeEach(() => {
         global.document = {
           cookie: ''
         };
@@ -133,9 +143,9 @@ describe('Gimbal', () => {
       });
 
       it('should return an error message', () => {
-        Gimbal.start((err, _) => {
-          expect(err).to.eql({ message: "Gimbal Public Key Required." });
-        });
+        Gimbal.start((err, _) =>
+          expect(err).to.eql({ message: "Gimbal Public Key Required." })
+        );
       });
     });
   });

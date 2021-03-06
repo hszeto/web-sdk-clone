@@ -1,5 +1,5 @@
-class Cookie {
-  static get(key) {
+const Cookie = {
+  get: function(key) {
     if (typeof key !== 'string') {
       return;
     }
@@ -9,9 +9,8 @@ class Cookie {
 
       return !!(k === key && v && v.length > 0)
     });
-  }
-
-  static set(key, value) {
+  },
+  set: function(key, value) {
     if (typeof value !== 'string' || !document || document.cookie === undefined) {
       return;
     }
@@ -22,6 +21,6 @@ class Cookie {
     const expires = `expires=${date.toGMTString()}`;
     document.cookie = `${key}=${value};path=/;${expires}`;
   }
-}
+};
 
 export { Cookie };

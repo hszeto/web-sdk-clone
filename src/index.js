@@ -1,23 +1,22 @@
 import { Cookie } from './storage';
 import Navigator  from './navigator';
 
-class Gimbal {
-  static setApiKey(publicKey) {
+const Gimbal = {
+  setApiKey: function(publicKey) {
     if (!publicKey || typeof publicKey !== 'string') {
       console.error('Gimbal Public Key Required.');
       return;
     }
 
     Cookie.set('gimbal-public-key', publicKey);
-  }
-
-  static start(callback=() => {}) {
+  },
+  start: function(callback=() => {}) {
     if (!Cookie.get('gimbal-public-key')) {
       callback({ message: 'Gimbal Public Key Required.' }, {});
       return;
     }
 
-    Navigator.getPosition()
+    return Navigator.getPosition()
       .then(({ latitude, longitude, accuracy }) => {
         callback(null, {
           latitude,

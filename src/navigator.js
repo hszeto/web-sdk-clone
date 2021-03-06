@@ -1,5 +1,5 @@
-class Navigator {
-  static getPosition() {
+const Navigator = {
+  getPosition: function() {
     return new Promise((resolve, reject) => {
       if (!navigator || !navigator.geolocation) {
         return reject({ message: 'Your platform is not supported.' });
@@ -25,6 +25,6 @@ class Navigator {
       );
     });
   }
-}
+};
 
 export default Navigator;
