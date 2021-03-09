@@ -27,10 +27,12 @@ describe('Navigator', () => {
 
       it('should return latitude, longitude, accuracy', () =>
         Navigator.getPosition()
-          .then(({ latitude, longitude, accuracy }) => {
-            expect(latitude).to.equal(12.345)
-            expect(longitude).to.equal(67.89)
-            expect(accuracy).to.equal(23)
+          .then((position) => {
+            expect(position).to.eql({
+              latitude: 12.345,
+              longitude: 67.89,
+              accuracy: 23
+            });
           })
       );
     });

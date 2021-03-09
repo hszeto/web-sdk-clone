@@ -1,7 +1,7 @@
 const Navigator = {
   getPosition: function() {
     return new Promise((resolve, reject) => {
-      if (!navigator || !navigator.geolocation) {
+      if (typeof navigator === 'undefined' || !navigator.geolocation) {
         return reject({ message: 'Your platform is not supported.' });
       }
 

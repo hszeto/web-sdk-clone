@@ -12,20 +12,19 @@ const Gimbal = {
   },
   start: function(callback=() => {}) {
     if (!Cookie.get('gimbal-public-key')) {
-      callback({ message: 'Gimbal Public Key Required.' }, {});
-      return;
+      return callback({ message: 'Gimbal Public Key Required.' }, {});
     }
 
     return Navigator.getPosition()
       .then(({ latitude, longitude, accuracy }) => {
-        callback(null, {
+        return callback(null, {
           latitude,
           longitude,
           accuracy,
         });
       })
       .catch(error => {
-        callback(error, {});
+        return callback(error, {});
       });
   }
 };
