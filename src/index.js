@@ -1,10 +1,11 @@
 import { Cookie } from './storage';
+import { ERROR }  from './constants';
 import Navigator  from './navigator';
 
 const Gimbal = {
   setApiKey: function(publicKey) {
     if (!publicKey || typeof publicKey !== 'string') {
-      console.error('Gimbal Public Key Required.');
+      console.error(ERROR.PUBLIC_KEY);
       return;
     }
 
@@ -12,7 +13,7 @@ const Gimbal = {
   },
   start: function(callback=() => {}) {
     if (!Cookie.get('gimbal-public-key')) {
-      return callback({ message: 'Gimbal Public Key Required.' }, {});
+      return callback({ message: ERROR.PUBLIC_KEY }, {});
     }
 
     return Navigator.getPosition()

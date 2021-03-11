@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 
+import { ERROR } from '../src/constants';
 import Navigator from '../src/navigator';
 
 describe('Navigator', () => {
@@ -42,7 +43,7 @@ describe('Navigator', () => {
         it('should return an error message', () =>
           Navigator.getPosition()
             .catch(error => {
-              expect(error).to.eql({ message: 'Your platform is not supported.'});
+              expect(error).to.eql({ message: ERROR.PLATFORM });
             })
         );
       });
@@ -65,7 +66,7 @@ describe('Navigator', () => {
         it('should return an error message', () =>
           Navigator.getPosition()
             .catch(error => {
-              expect(error).to.eql({ message: 'Cannot find your position.'});
+              expect(error).to.eql({ message: ERROR.POSITION });
             })
         );
       });
@@ -90,7 +91,7 @@ describe('Navigator', () => {
         it('should return an error message', () =>
           Navigator.getPosition()
             .catch(error => {
-              expect(error).to.eql({ message: 'Permission Denied!'});
+              expect(error).to.eql({ message: ERROR.PERMISSION});
             })
         );
       });
@@ -115,7 +116,7 @@ describe('Navigator', () => {
         it('should return an error message', () =>
           Navigator.getPosition()
             .catch(error => {
-              expect(error).to.eql({ message: 'ERROR' });
+              expect(error).to.eql({ message: ERROR.GET_CURRENT_POSITION });
             })
         );
       });

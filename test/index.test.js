@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 import { Cookie } from '../src/storage';
+import { ERROR } from '../src/constants';
 import Gimbal from '../src/index';
 import Navigator from '../src/navigator';
 
@@ -40,7 +41,7 @@ describe('Gimbal', () => {
 
       it('should return an error message', () => {
         expect(console.error)
-          .to.have.been.calledWith('Gimbal Public Key Required.');
+          .to.have.been.calledWith(ERROR.PUBLIC_KEY);
       });
     });
 
@@ -57,7 +58,7 @@ describe('Gimbal', () => {
 
       it('should return an error message', () => {
         expect(console.error)
-          .to.have.been.calledWith('Gimbal Public Key Required.');
+          .to.have.been.calledWith(ERROR.PUBLIC_KEY);
       });
     });
   });
@@ -113,7 +114,7 @@ describe('Gimbal', () => {
 
       it('should return an error message', (done) => {
         Gimbal.start((err, _) => {
-          expect(err).to.eql({ message: 'Gimbal Public Key Required.' });
+          expect(err).to.eql({ message: ERROR.PUBLIC_KEY });
 
           done();
         });
@@ -127,7 +128,7 @@ describe('Gimbal', () => {
         };
 
         sinon.stub(Navigator, 'getPosition')
-          .rejects({ message: 'ERROR' })
+          .rejects({ message: ERROR.GET_CURRENT_POSITION })
       });
 
       afterEach(() => {
@@ -140,7 +141,7 @@ describe('Gimbal', () => {
 
       it('should return an error message', (done) => {
         Gimbal.start((err, _) => {
-          expect(err).to.eql({ message: 'ERROR' });
+          expect(err).to.eql({ message: ERROR.GET_CURRENT_POSITION });
 
           done();
         });

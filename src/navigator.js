@@ -1,14 +1,16 @@
+import { ERROR }  from './constants';
+
 const Navigator = {
   getPosition: function() {
     return new Promise((resolve, reject) => {
       if (typeof navigator === 'undefined' || !navigator.geolocation) {
-        return reject({ message: 'Your platform is not supported.' });
+        return reject({ message: ERROR.PLATFORM });
       }
 
       navigator.geolocation.getCurrentPosition(
         (position) => {
           if (!position || !position.coords) {
-            return reject({ message: 'Cannot find your position.' });
+            return reject({ message: ERROR.POSITION });
           }
 
           const { latitude, longitude, accuracy } = position.coords;
@@ -17,10 +19,10 @@ const Navigator = {
         },
         (err) => {
           if (err && err.code && err.code === 1) {
-            return reject({ message: 'Permission Denied!' });
+            return reject({ message: ERROR.PERMISSION });
           }
 
-          return reject({ message: 'ERROR' });
+          return reject({ message: ERROR.GET_CURRENT_POSITION });
         }
       );
     });
