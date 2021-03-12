@@ -1,11 +1,8 @@
-import chai, { expect } from 'chai';
+import { expect } from 'chai';
 import fetchMock from 'fetch-mock';
-import sinonChai from 'sinon-chai';
 
 import { ERROR } from '../../src/constants';
-import { otwClient } from '../../src/api/otw-client';
-
-chai.use(sinonChai);
+import OTW_Client from '../../src/api/otw-client';
 
 const mockLatLong = {
   latitude: 111,
@@ -22,13 +19,10 @@ describe('OTW-Client', () => {
       fetchMock.restore();
     });
 
-    it('should return true', (done) => {
-      otwClient(mockLatLong, (err, result) => {
-        expect(result).to.be.true;
-
-        done();
-      });
-    });
+    it('should return true', () =>
+      OTW_Client.didArrive(mockLatLong)
+        .then(result => expect(result).to.be.true)
+    );
   });
 
   context('when fail', () => {
@@ -40,12 +34,9 @@ describe('OTW-Client', () => {
       fetchMock.restore();
     });
 
-    it('should return an error', (done) => {
-      otwClient(mockLatLong, (err, result) => {
-        expect(err).to.eql({ message: ERROR.SERVER });
-
-        done();
-      });
-    });
+    it('should return an error', () =>
+      OTW_Client.didArrive(mockLatLong)
+        .catch(error => expect(error).to.be.eql({message: ERROR.SERVER}))
+    );
   });
 });

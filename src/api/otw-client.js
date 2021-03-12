@@ -1,12 +1,12 @@
 import { ERROR, URL }  from '../constants';
 
-const otwClient = (location, callback) => {
+const didArrive = (location) => {
   return new Promise((resolve, reject) => {
     fetch(URL.OTW_API_URL)
       .then(response => response.json())
-      .then(json => resolve(callback(null, json)) )
-      .catch(error => reject(callback({message: ERROR.SERVER}, null)) )
-  })
-}
+      .then(json => resolve(json))
+      .catch(error => reject({ message: ERROR.SERVER }));
+  });
+};
 
-export { otwClient };
+export default { didArrive };

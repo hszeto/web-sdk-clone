@@ -4,6 +4,14 @@ const ERROR = {
   PLATFORM: 'The platform is not supported.',
   POSITION: 'Cannot locate the current position.',
   PUBLIC_KEY: 'Gimbal Public Key Required.',
+  SERVER: 'Server Error'
 };
 
-export { ERROR };
+const URL = {
+  OTW_API_URL: 'https://www.gimbal.com'
+};
+
+export {
+  ERROR,
+  URL
+};
