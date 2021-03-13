@@ -89,7 +89,7 @@ describe('Gimbal', () => {
       });
 
       it('should return latitude, longitude, and accuracy', (done) => {
-        Gimbal.start((err, position) => {
+        Gimbal.getLocation((err, position) => {
           expect(position).to.eql({
             latitude: 12.345,
             longitude: 23.45,
@@ -115,7 +115,7 @@ describe('Gimbal', () => {
       });
 
       it('should return an error', (done) => {
-        Gimbal.start((err, _) => {
+        Gimbal.getLocation((err, _) => {
           expect(err).to.eql({ message: ERROR.PUBLIC_KEY });
 
           done();
@@ -142,7 +142,7 @@ describe('Gimbal', () => {
       });
 
       it('should return an error', (done) => {
-        Gimbal.start((err, _) => {
+        Gimbal.getLocation((err, _) => {
           expect(err).to.eql({ message: ERROR.GET_CURRENT_POSITION });
 
           done();
@@ -169,7 +169,7 @@ describe('Gimbal', () => {
       });
 
       it('should return an error', (done) => {
-        Gimbal.start((err, _) => {
+        Gimbal.getLocation((err, _) => {
           expect(err).to.eql({ message: ERROR.PUBLIC_KEY });
 
           done();

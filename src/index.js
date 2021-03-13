@@ -13,7 +13,7 @@ const Gimbal = {
 
     Cookie.set('gimbal-public-key', publicKey);
   },
-  start: function(callback=() => {}) {
+  getLocation: function(callback=() => {}) {
     if (!Cookie.get('gimbal-public-key')) {
       return callback({ message: ERROR.PUBLIC_KEY }, {});
     }
