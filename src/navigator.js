@@ -26,6 +26,32 @@ const Navigator = {
         }
       );
     });
+  },
+  watchPosition: function() {
+    return new Promise((resolve, reject) => {
+      if (typeof navigator === 'undefined' || !navigator.geolocation) {
+        return reject({ message: ERROR.PLATFORM });
+      }
+
+      navigator.geolocation.watchPosition(
+        (position) => {
+          if (!position || !position.coords) {
+            return reject({ message: ERROR.POSITION });
+          }
+
+          const { latitude, longitude, accuracy } = position.coords;
+
+          return resolve({ latitude, longitude, accuracy });
+        },
+        (err) => {
+          if (err && err.code && err.code === 1) {
+            return reject({ message: ERROR.PERMISSION });
+          }
+
+          return reject({ message: ERROR.GET_CURRENT_POSITION });
+        }
+      );
+    });
   }
 };
 

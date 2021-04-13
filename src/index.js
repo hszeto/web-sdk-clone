@@ -13,24 +13,7 @@ const Gimbal = {
 
     Cookie.set('gimbal-public-key', publicKey);
   },
-  getLocation: function(callback=() => {}) {
-    if (!Cookie.get('gimbal-public-key')) {
-      return callback({ message: ERROR.PUBLIC_KEY }, {});
-    }
-
-    return Navigator.getPosition()
-      .then(({ latitude, longitude, accuracy }) => {
-        return callback(null, {
-          latitude,
-          longitude,
-          accuracy,
-        });
-      })
-      .catch(error => {
-        return callback(error, {});
-      });
-  },
-  didUserArrive: function(arg1, arg2=()=>{}) {
+  didUserArrive: function(arg1, arg2=() => {}) {
     if (!Cookie.get('gimbal-public-key')) {
       return callback({ message: ERROR.PUBLIC_KEY }, {});
     }
@@ -55,6 +38,40 @@ const Gimbal = {
         })
         .catch(error => callback(error, {}) );
     }
+  },
+  getLocation: function(callback=() => {}) {
+    if (!Cookie.get('gimbal-public-key')) {
+      return callback({ message: ERROR.PUBLIC_KEY }, {});
+    }
+
+    return Navigator.getPosition()
+      .then(({ latitude, longitude, accuracy }) => {
+        return callback(null, {
+          latitude,
+          longitude,
+          accuracy,
+        });
+      })
+      .catch(error => {
+        return callback(error, {});
+      });
+  },
+  watchLocation: function(callback=() => {}) {
+    if (!Cookie.get('gimbal-public-key')) {
+      return callback({ message: ERROR.PUBLIC_KEY }, {});
+    }
+
+    return Navigator.watchPosition()
+      .then(({ latitude, longitude, accuracy }) => {
+        return callback(null, {
+          latitude,
+          longitude,
+          accuracy,
+        });
+      })
+      .catch(error => {
+        return callback(error, {});
+      });
   }
 };
 
