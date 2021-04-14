@@ -19,7 +19,7 @@ const Cookie = {
     date.setFullYear(date.getFullYear() + 1);
 
     const expires = `expires=${date.toGMTString()}`;
-    document.cookie = `${key}=${value};path=/;${expires}`;
+    document.cookie = `${key}=${value};path=/;${expires};SameSite=Lax`;
   }
 };
 
