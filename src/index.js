@@ -72,6 +72,9 @@ const Gimbal = {
       .catch(error => {
         return callback(error, {});
       });
+  },
+  clearWatchLocation: function(id) {
+    Navigator.clearWatchLocation(id);
   }
 };
 

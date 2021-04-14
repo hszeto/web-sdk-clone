@@ -47,11 +47,22 @@ const Navigator = {
           if (err && err.code && err.code === 1) {
             return reject({ message: ERROR.PERMISSION });
           }
-
+console.log("What error from sdk?!");
+console.log(err);
           return reject({ message: ERROR.GET_CURRENT_POSITION });
+        },
+        {
+          enableHighAccuracy: true,
+          distanceFilter: 1,
+          // maximumAge: 0,
+          timeout: 15000,
         }
       );
     });
+  },
+  clearWatchLocation: function(id) {
+    navigator.geolocation.clearWatch(id);
+    console.log('Clear Watch Location...');
   }
 };
 
