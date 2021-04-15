@@ -62,12 +62,19 @@ const Gimbal = {
     }
 
     return Navigator.watchPosition()
-      .then(({ latitude, longitude, accuracy }) => {
-        return callback(null, {
+      .then(({ watchId, latitude, longitude, accuracy }) => {
+        // return callback(null, {
+        //   latitude,
+        //   longitude,
+        //   accuracy,
+        // });
+        callback(null, {
           latitude,
           longitude,
           accuracy,
         });
+
+        return watchId;
       })
       .catch(error => {
         return callback(error, {});

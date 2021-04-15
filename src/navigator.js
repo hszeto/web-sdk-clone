@@ -33,7 +33,7 @@ const Navigator = {
         return reject({ message: ERROR.PLATFORM });
       }
 
-      navigator.geolocation.watchPosition(
+      const watchId = navigator.geolocation.watchPosition(
         (position) => {
           if (!position || !position.coords) {
             return reject({ message: ERROR.POSITION });
@@ -41,29 +41,37 @@ const Navigator = {
 
           const { latitude, longitude, accuracy } = position.coords;
 
-          return resolve({ latitude, longitude, accuracy });
+          return resolve({ watchId, latitude, longitude, accuracy });
         },
         (err) => {
           if (err && err.code && err.code === 1) {
             return reject({ message: ERROR.PERMISSION });
           }
-console.log("What error from sdk?!");
-console.log(err);
+
+          console.log("What error from sdk?!");
+          console.log(err);
+
           return reject({ message: ERROR.GET_CURRENT_POSITION });
         },
         {
           enableHighAccuracy: true,
           distanceFilter: 1,
-          // maximumAge: 0,
-          timeout: 15000,
+          // maximumAge: 15000,
+          // timeout: 20000,
         }
       );
     });
   },
   clearWatchLocation: function(id) {
-    navigator.geolocation.clearWatch(id);
     console.log('Clear Watch Location...');
+    console.log(id);
+    navigator.geolocation.clearWatch(id);
+    console.log('Cleared Watch Location.');
   }
 };
 
 export default Navigator;
+
+
+// // maximumAge: 0,
+// timeout: 15000,
