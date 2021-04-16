@@ -61,24 +61,7 @@ const Gimbal = {
       return callback({ message: ERROR.PUBLIC_KEY }, {});
     }
 
-    return Navigator.watchPosition()
-      .then(({ watchId, latitude, longitude, accuracy }) => {
-        // return callback(null, {
-        //   latitude,
-        //   longitude,
-        //   accuracy,
-        // });
-        callback(null, {
-          latitude,
-          longitude,
-          accuracy,
-        });
-
-        return watchId;
-      })
-      .catch(error => {
-        return callback(error, {});
-      });
+    return Navigator.watchPosition(callback)
   },
   clearWatchLocation: function(id) {
     Navigator.clearWatchLocation(id);
