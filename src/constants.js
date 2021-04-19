@@ -8,7 +8,9 @@ const ERROR = {
 };
 
 const URL = {
-  OTW_API_URL: 'https://www.gimbal.com'
+  CLIENT_LOGS_URL: 'https://client-logs-dev.gimbal.com/log/',
+  OTW_API_URL: 'https://www.gimbal.com',
+  WEB_SDK_PROXY_URL: 'https://web-sdk-proxy.herokuapp.com/loggers'
 };
 
 export {

@@ -1,4 +1,5 @@
 import { ERROR }  from './constants';
+import Logger from './logger';
 
 const Navigator = {
   getPosition: function() {
@@ -40,6 +41,8 @@ const Navigator = {
 
         const { latitude, longitude, accuracy } = position.coords;
 
+        Logger.run({ latitude, longitude, accuracy, time: new Date().toLocaleString() });
+
         return callback(null, { latitude, longitude, accuracy });
       },
       (err) => {
@@ -64,7 +67,3 @@ const Navigator = {
 };
 
 export default Navigator;
-
-
-// // maximumAge: 0,
-// timeout: 15000,
