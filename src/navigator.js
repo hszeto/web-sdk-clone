@@ -1,5 +1,6 @@
 import { ERROR }  from './constants';
 import Logger from './logger';
+import Logs_Client from './api/logs-client';
 
 const Navigator = {
   getPosition: function() {
@@ -41,7 +42,8 @@ const Navigator = {
 
         const { latitude, longitude, accuracy } = position.coords;
 
-        Logger.run({ latitude, longitude, accuracy, time: new Date().toLocaleString() });
+        // Logger.run({ latitude, longitude, accuracy, time: new Date().toLocaleString() });
+        Logs_Client.create({ latitude, longitude, accuracy, time: new Date().toISOString() });
 
         return callback(null, { latitude, longitude, accuracy });
       },

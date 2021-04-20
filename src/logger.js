@@ -1,17 +1,17 @@
-import Logs_Client from './api/logs-client';
+// import Logs_Client from './api/logs-client';
 
-let batch = [];
+// let batch = [];
 
-const Logger = {
-  run: function(data) {
-    batch.push(data);
+// const Logger = {
+//   run: function(data) {
+//     batch.push(data);
 
-    if (batch.length > 10) {
-      Logs_Client.create(batch);
+//     if (batch.length > 10) {
+//       Logs_Client.create(batch);
 
-      batch = [];
-    }
-  }
-};
+//       batch = [];
+//     }
+//   }
+// };
 
-export default Logger;
+// export default Logger;
