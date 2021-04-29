@@ -22,5 +22,8 @@
   "scripts": {
     "test": "mocha \"test/**/*.test.js\""
   },
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "point-in-polygon": "^1.1.0"
+  }
 }
