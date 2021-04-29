@@ -4,6 +4,8 @@ import Navigator  from './navigator';
 
 import OTW_Client from './api/otw-client';
 
+const defaultCallback = () => {};
+
 const Gimbal = {
   setApiKey: function(publicKey) {
     if (!publicKey || typeof publicKey !== 'string') {
@@ -13,7 +15,7 @@ const Gimbal = {
 
     Cookie.set('gimbal-public-key', publicKey);
   },
-  didUserArrive: function(arg1, arg2=() => {}) {
+  didUserArrive: function(arg1, arg2=defaultCallback) {
     if (!Cookie.get('gimbal-public-key')) {
       return callback({ message: ERROR.PUBLIC_KEY }, {});
     }
@@ -39,7 +41,7 @@ const Gimbal = {
         .catch(error => callback(error, {}) );
     }
   },
-  getLocation: function(callback=() => {}) {
+  getLocation: function(callback=defaultCallback) {
     if (!Cookie.get('gimbal-public-key')) {
       return callback({ message: ERROR.PUBLIC_KEY }, {});
     }
@@ -56,12 +58,19 @@ const Gimbal = {
         return callback(error, {});
       });
   },
-  watchLocation: function(callback=() => {}) {
+  watchLocation: function(callback=defaultCallback) {
     if (!Cookie.get('gimbal-public-key')) {
       return callback({ message: ERROR.PUBLIC_KEY }, {});
     }
 
     return Navigator.watchPosition(callback)
+  },
+  startMonitoring: function(callback=defaultCallback) {
+    if (!Cookie.get('gimbal-public-key')) {
+      return callback({ message: ERROR.PUBLIC_KEY }, {});
+    }
+
+    return Navigator.track(callback);
   },
   clearWatchLocation: function(id) {
     Navigator.clearWatchLocation(id);

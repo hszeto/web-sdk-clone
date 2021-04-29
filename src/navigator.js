@@ -1,5 +1,5 @@
 import { ERROR }  from './constants';
-import Logger from './logger';
+import { hasArrived } from './helpers/arrival';
 import Logs_Client from './api/logs-client';
 
 const Navigator = {
@@ -29,7 +29,14 @@ const Navigator = {
       );
     });
   },
-  watchPosition: function(callback) {
+  track: function(callback){
+    const tmpGeofence = [
+      [34.114003945073904, -118.06330838142144],
+      [34.11399450725456,  -118.06339018879675],
+      [34.11396008696341,  -118.06338214216967],
+      [34.1139684144545,   -118.06329765258533],
+    ];
+
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
       return callback({ message: ERROR.PLATFORM }, {});
     }
@@ -42,7 +49,44 @@ const Navigator = {
 
         const { latitude, longitude, accuracy } = position.coords;
 
-        // Logger.run({ latitude, longitude, accuracy, time: new Date().toLocaleString() });
+        if (hasArrived([latitude, longitude], tmpGeofence)) {
+          return callback(null, { latitude, longitude, accuracy, state: 'Arrived' });
+        } else {
+          return callback(null, { latitude, longitude, accuracy, state: 'Success' });
+        }
+      },
+      (err) => {
+        if (err && err.code && err.code === 1) {
+          return callback({ message: ERROR.PERMISSION }, {});
+        }
+
+        return callback({ message: ERROR.GET_CURRENT_POSITION }, {});
+      },
+      {
+        enableHighAccuracy: true,
+        distanceFilter: 1,
+      }
+    );
+  },
+  watchPosition: function(callback) {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      return callback({ message: ERROR.PLATFORM }, {});
+    }
+
+    return navigator.geolocation.watchPosition(
+      (position) => {
+        if (!position || !position.coords) {
+          return callback({ message: ERROR.POSITION }, {});
+        }
+
+
+        /*
+        `position.coors` returns:
+        GeolocationCoordinates { latitude: 34.11382998852447, longitude: -118.06301682293301, altitude: 132.4998779296875, accuracy: 65, altitudeAccuracy: 10, heading: null, speed: null }
+        */
+
+        const { latitude, longitude, accuracy } = position.coords;
+
         Logs_Client.create({ latitude, longitude, accuracy, time: new Date().toISOString() });
 
         return callback(null, { latitude, longitude, accuracy });
