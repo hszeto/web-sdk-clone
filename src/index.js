@@ -2,48 +2,48 @@ import { Cookie } from './storage';
 import { ERROR }  from './constants';
 import Navigator  from './navigator';
 
-import OTW_Client from './api/otw-client';
+// import OTW_Client from './api/otw-client';
 
 const defaultCallback = () => {};
 
 const Gimbal = {
-  setApiKey: function(publicKey) {
-    if (!publicKey || typeof publicKey !== 'string') {
-      console.error(ERROR.PUBLIC_KEY);
+  setHostName: function(host) {
+    if (!host || typeof host !== 'string') {
+      console.error(ERROR.HOST_NAME);
       return;
     }
 
-    Cookie.set('gimbal-public-key', publicKey);
+    Cookie.set('gimbal-sdk-host', host);
   },
-  didUserArrive: function(arg1, arg2=defaultCallback) {
-    if (!Cookie.get('gimbal-public-key')) {
-      return callback({ message: ERROR.PUBLIC_KEY }, {});
-    }
+  // didUserArrive: function(arg1, arg2=defaultCallback) {
+  //   if (!Cookie.get('gimbal-sdk-host')) {
+  //     return callback({ message: ERROR.PUBLIC_KEY }, {});
+  //   }
 
-    let callback, location;
+  //   let callback, location;
 
-    if (typeof arg1 === 'object' && !!arg1.latitude && !!arg1.longitude) {
-      callback = arg2;
-      location = arg1;
+  //   if (typeof arg1 === 'object' && !!arg1.latitude && !!arg1.longitude) {
+  //     callback = arg2;
+  //     location = arg1;
 
-      return OTW_Client.didArrive(location, callback)
-        .then(response => callback(null, response))
-        .catch(error => callback(error, {}));
-    } else {
-      callback = arg1;
+  //     return OTW_Client.didArrive(location, callback)
+  //       .then(response => callback(null, response))
+  //       .catch(error => callback(error, {}));
+  //   } else {
+  //     callback = arg1;
 
-      return Navigator.getPosition()
-        .then(location => {
-          return OTW_Client.didArrive(location, callback)
-            .then(response => callback(null, response))
-            .catch(error => callback(error, {}));
-        })
-        .catch(error => callback(error, {}) );
-    }
-  },
+  //     return Navigator.getPosition()
+  //       .then(location => {
+  //         return OTW_Client.didArrive(location, callback)
+  //           .then(response => callback(null, response))
+  //           .catch(error => callback(error, {}));
+  //       })
+  //       .catch(error => callback(error, {}) );
+  //   }
+  // },
   getLocation: function(callback=defaultCallback) {
-    if (!Cookie.get('gimbal-public-key')) {
-      return callback({ message: ERROR.PUBLIC_KEY }, {});
+    if (!Cookie.get('gimbal-sdk-host')) {
+      return callback({ message: ERROR.HOST_NAME }, {});
     }
 
     return Navigator.getPosition()
@@ -59,15 +59,15 @@ const Gimbal = {
       });
   },
   watchLocation: function(callback=defaultCallback) {
-    if (!Cookie.get('gimbal-public-key')) {
-      return callback({ message: ERROR.PUBLIC_KEY }, {});
+    if (!Cookie.get('gimbal-sdk-host')) {
+      return callback({ message: ERROR.HOST_NAME }, {});
     }
 
     return Navigator.watchPosition(callback)
   },
   startMonitoring: function(callback=defaultCallback) {
-    if (!Cookie.get('gimbal-public-key')) {
-      return callback({ message: ERROR.PUBLIC_KEY }, {});
+    if (!Cookie.get('gimbal-sdk-host')) {
+      return callback({ message: ERROR.HOST_NAME }, {});
     }
 
     return Navigator.track(callback);

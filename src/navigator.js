@@ -79,7 +79,6 @@ const Navigator = {
           return callback({ message: ERROR.POSITION }, {});
         }
 
-
         /*
         `position.coors` returns:
         GeolocationCoordinates { latitude: 34.11382998852447, longitude: -118.06301682293301, altitude: 132.4998779296875, accuracy: 65, altitudeAccuracy: 10, heading: null, speed: null }

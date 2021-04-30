@@ -12,12 +12,12 @@ import OTW_Client from '../src/api/otw-client';
 chai.use(sinonChai);
 
 describe('Gimbal', () => {
-  describe('setApiKey', () => {
-    context('when public key is present', () => {
+  describe('setHostName', () => {
+    context('when hostname is present', () => {
       beforeEach(() => {
         sinon.stub(Cookie, 'set');
 
-        Gimbal.setApiKey('GimbalTestPublicKey-abc-123');
+        Gimbal.setHostName('www.client-proxy.com');
       });
 
       afterEach(() => {
@@ -26,15 +26,15 @@ describe('Gimbal', () => {
 
       it('should call `Cookie.set()`', () => {
         expect(Cookie.set).to.have.been
-          .calledWith('gimbal-public-key', 'GimbalTestPublicKey-abc-123');
+          .calledWith('gimbal-sdk-host', 'www.client-proxy.com');
       });
     })
 
-    context('when public key is missing', () => {
+    context('when hostname is missing', () => {
       beforeEach(() => {
         sinon.stub(console, 'error');
 
-        Gimbal.setApiKey();
+        Gimbal.setHostName();
       });
 
       afterEach(() => {
@@ -43,15 +43,15 @@ describe('Gimbal', () => {
 
       it('should console log an error message', () => {
         expect(console.error)
-          .to.have.been.calledWith(ERROR.PUBLIC_KEY);
+          .to.have.been.calledWith(ERROR.HOST_NAME);
       });
     });
 
-    context('when public key is invalid', () => {
+    context('when hostname is invalid', () => {
       beforeEach(() => {
         sinon.stub(console, 'error');
 
-        Gimbal.setApiKey(123);
+        Gimbal.setHostName(123);
       });
 
       afterEach(() => {
@@ -60,7 +60,7 @@ describe('Gimbal', () => {
 
       it('should console log an error message', () => {
         expect(console.error)
-          .to.have.been.calledWith(ERROR.PUBLIC_KEY);
+          .to.have.been.calledWith(ERROR.HOST_NAME);
       });
     });
   });
@@ -69,7 +69,7 @@ describe('Gimbal', () => {
     context('when success', () => {
       beforeEach(() => {
         global.document = {
-          cookie: 'gimbal-public-key=GimbalTestPublicKey-123'
+          cookie: 'gimbal-sdk-host=www.client-proxy.com'
         };
 
         sinon.stub(Navigator, 'getPosition')
@@ -101,7 +101,7 @@ describe('Gimbal', () => {
       });
     });
 
-    context('when the Gimbal Public Key is missing', () => {
+    context('when the hostname is missing', () => {
       beforeEach(() => {
         global.document = {
           cookie: ''
@@ -116,7 +116,7 @@ describe('Gimbal', () => {
 
       it('should return an error', (done) => {
         Gimbal.getLocation((err, _) => {
-          expect(err).to.eql({ message: ERROR.PUBLIC_KEY });
+          expect(err).to.eql({ message: ERROR.HOST_NAME });
 
           done();
         });
@@ -126,7 +126,7 @@ describe('Gimbal', () => {
     context('when the Navigator fails', () => {
       beforeEach(() => {
         global.document = {
-          cookie: 'gimbal-public-key=GimbalTestPublicKey-123'
+          cookie: 'gimbal-sdk-host=www.client-proxy.com'
         };
 
         sinon.stub(Navigator, 'getPosition')
@@ -151,183 +151,183 @@ describe('Gimbal', () => {
     });
   });
 
-  describe('didUserArrive', () => {
-    let stubNavigator;
-    let stubOtwClient;
+  // describe('didUserArrive', () => {
+  //   let stubNavigator;
+  //   let stubOtwClient;
 
-    context('when the Gimbal Public Key is missing', () => {
-      beforeEach(() => {
-        global.document = {
-          cookie: ''
-        };
-      });
+  //   context('when the Gimbal Public Key is missing', () => {
+  //     beforeEach(() => {
+  //       global.document = {
+  //         cookie: ''
+  //       };
+  //     });
 
-      afterEach(() => {
-        global.document = {
-          cookie: undefined
-        };
-      });
+  //     afterEach(() => {
+  //       global.document = {
+  //         cookie: undefined
+  //       };
+  //     });
 
-      it('should return an error', (done) => {
-        Gimbal.getLocation((err, _) => {
-          expect(err).to.eql({ message: ERROR.PUBLIC_KEY });
+  //     it('should return an error', (done) => {
+  //       Gimbal.getLocation((err, _) => {
+  //         expect(err).to.eql({ message: ERROR.PUBLIC_KEY });
 
-          done();
-        });
-      });
-    });
+  //         done();
+  //       });
+  //     });
+  //   });
 
-    context('when the location is specified', () => {
-      beforeEach(() => {
-        global.document = {
-          cookie: 'gimbal-public-key=GimbalTestPublicKey-123'
-        };
+  //   context('when the location is specified', () => {
+  //     beforeEach(() => {
+  //       global.document = {
+  //         cookie: 'gimbal-public-key=GimbalTestPublicKey-123'
+  //       };
 
-        stubNavigator = sinon.spy(Navigator, 'getPosition');
-      });
+  //       stubNavigator = sinon.spy(Navigator, 'getPosition');
+  //     });
 
-      afterEach(() => {
-        global.document = {
-          cookie: undefined
-        };
+  //     afterEach(() => {
+  //       global.document = {
+  //         cookie: undefined
+  //       };
 
-        Navigator.getPosition.restore();
+  //       Navigator.getPosition.restore();
 
-        stubOtwClient.restore();
-      });
+  //       stubOtwClient.restore();
+  //     });
 
-      context('when arrived', () => {
-        it('should return true', (done) => {
-          stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
-            .resolves(true);
+  //     context('when arrived', () => {
+  //       it('should return true', (done) => {
+  //         stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
+  //           .resolves(true);
 
-          Gimbal.didUserArrive({latitude: 888, longitude: 999}, (err, result) => {
-            expect(stubNavigator).to.have.not.been.called;
-            expect(result).to.be.true;
+  //         Gimbal.didUserArrive({latitude: 888, longitude: 999}, (err, result) => {
+  //           expect(stubNavigator).to.have.not.been.called;
+  //           expect(result).to.be.true;
 
-            done();
-          })
-        });
-      });
+  //           done();
+  //         })
+  //       });
+  //     });
 
-      context('when not arrived', () => {
-        it('should return false', (done) => {
-          stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
-            .resolves(false);
+  //     context('when not arrived', () => {
+  //       it('should return false', (done) => {
+  //         stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
+  //           .resolves(false);
 
-          Gimbal.didUserArrive({latitude: 888, longitude: 999}, (err, result) => {
-            expect(stubNavigator).to.have.not.been.called;
-            expect(result).to.be.false;
+  //         Gimbal.didUserArrive({latitude: 888, longitude: 999}, (err, result) => {
+  //           expect(stubNavigator).to.have.not.been.called;
+  //           expect(result).to.be.false;
 
-            done();
-          });
-        });
-      });
+  //           done();
+  //         });
+  //       });
+  //     });
 
-      context('when error', () => {
-        it('should return an error', (done) => {
-          stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
-            .rejects({ message: ERROR.SERVER });
+  //     context('when error', () => {
+  //       it('should return an error', (done) => {
+  //         stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
+  //           .rejects({ message: ERROR.SERVER });
 
-          Gimbal.didUserArrive({latitude: 888, longitude: 999}, (err, result) => {
-            expect(err).to.eql({ message: ERROR.SERVER });
+  //         Gimbal.didUserArrive({latitude: 888, longitude: 999}, (err, result) => {
+  //           expect(err).to.eql({ message: ERROR.SERVER });
 
-            done();
-          });
+  //           done();
+  //         });
 
-        });
-      });
-    })
+  //       });
+  //     });
+  //   })
 
-    context('when the location is not specified', () => {
-      beforeEach(() => {
-        global.document = {
-          cookie: 'gimbal-public-key=GimbalTestPublicKey-123'
-        };
-      });
+  //   context('when the location is not specified', () => {
+  //     beforeEach(() => {
+  //       global.document = {
+  //         cookie: 'gimbal-public-key=GimbalTestPublicKey-123'
+  //       };
+  //     });
 
-      afterEach(() => {
-        global.document = {
-          cookie: undefined
-        };
-      });
+  //     afterEach(() => {
+  //       global.document = {
+  //         cookie: undefined
+  //       };
+  //     });
 
-      context('when getPosition success', () => {
-        beforeEach(() => {
-          stubNavigator = sinon.stub(Navigator, 'getPosition')
-            .resolves({
-              latitude: 12.345,
-              longitude: 23.45,
-              accuracy: 22
-            });
-        });
+  //     context('when getPosition success', () => {
+  //       beforeEach(() => {
+  //         stubNavigator = sinon.stub(Navigator, 'getPosition')
+  //           .resolves({
+  //             latitude: 12.345,
+  //             longitude: 23.45,
+  //             accuracy: 22
+  //           });
+  //       });
 
-        afterEach(() => {
-          Navigator.getPosition.restore();
+  //       afterEach(() => {
+  //         Navigator.getPosition.restore();
 
-          stubOtwClient.restore();
-        });
+  //         stubOtwClient.restore();
+  //       });
 
-        context('when arrived', () => {
-          it('should return true', (done) => {
-            stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
-              .resolves(true);
+  //       context('when arrived', () => {
+  //         it('should return true', (done) => {
+  //           stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
+  //             .resolves(true);
 
-            Gimbal.didUserArrive((err, result) => {
-              expect(stubNavigator).to.have.been.called;
-              expect(result).to.be.true;
+  //           Gimbal.didUserArrive((err, result) => {
+  //             expect(stubNavigator).to.have.been.called;
+  //             expect(result).to.be.true;
 
-              done();
-            })
-          });
-        });
+  //             done();
+  //           })
+  //         });
+  //       });
 
-        context('when not arrived', () => {
-          it('should return false', (done) => {
-            stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
-              .resolves(false);
+  //       context('when not arrived', () => {
+  //         it('should return false', (done) => {
+  //           stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
+  //             .resolves(false);
 
-            Gimbal.didUserArrive((err, result) => {
-              expect(stubNavigator).to.have.been.called;
-              expect(result).to.be.false;
+  //           Gimbal.didUserArrive((err, result) => {
+  //             expect(stubNavigator).to.have.been.called;
+  //             expect(result).to.be.false;
 
-              done();
-            });
-          });
-        });
+  //             done();
+  //           });
+  //         });
+  //       });
 
-        context('when error', () => {
-          it('should return an error', (done) => {
-            stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
-              .rejects({ message: ERROR.SERVER });
+  //       context('when error', () => {
+  //         it('should return an error', (done) => {
+  //           stubOtwClient = sinon.stub(OTW_Client, 'didArrive')
+  //             .rejects({ message: ERROR.SERVER });
 
-            Gimbal.didUserArrive((err, result) => {
-              expect(err).to.eql({ message: ERROR.SERVER });
+  //           Gimbal.didUserArrive((err, result) => {
+  //             expect(err).to.eql({ message: ERROR.SERVER });
 
-              done();
-            });
-          });
-        });
-      });
+  //             done();
+  //           });
+  //         });
+  //       });
+  //     });
 
-      context('when getPosition fail', () => {
-        beforeEach(() => {
-          sinon.stub(Navigator, 'getPosition')
-            .rejects({ message: ERROR.GET_CURRENT_POSITION });
-        });
+  //     context('when getPosition fail', () => {
+  //       beforeEach(() => {
+  //         sinon.stub(Navigator, 'getPosition')
+  //           .rejects({ message: ERROR.GET_CURRENT_POSITION });
+  //       });
 
-        afterEach(() => {
-          Navigator.getPosition.restore();
-        });
+  //       afterEach(() => {
+  //         Navigator.getPosition.restore();
+  //       });
 
-        it('should return an error', (done) => {
-          Gimbal.didUserArrive((err, result) => {
-            expect(err).to.eql({ message: ERROR.GET_CURRENT_POSITION });
+  //       it('should return an error', (done) => {
+  //         Gimbal.didUserArrive((err, result) => {
+  //           expect(err).to.eql({ message: ERROR.GET_CURRENT_POSITION });
 
-            done();
-          });
-        });
-      });
-    })
-  });
+  //           done();
+  //         });
+  //       });
+  //     });
+  //   })
+  // });
 });
