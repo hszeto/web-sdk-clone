@@ -50,9 +50,9 @@ const Navigator = {
         const { latitude, longitude, accuracy } = position.coords;
 
         if (hasArrived([latitude, longitude], tmpGeofence)) {
-          return callback(null, { latitude, longitude, accuracy, state: 'Arrived' });
+          return callback(null, { latitude, longitude, accuracy, state: 'detectedArrival' });
         } else {
-          return callback(null, { latitude, longitude, accuracy, state: 'Success' });
+          return callback(null, { latitude, longitude, accuracy, state: 'onTheWay' });
         }
       },
       (err) => {
