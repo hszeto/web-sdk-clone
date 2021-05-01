@@ -29,7 +29,7 @@ const Navigator = {
       );
     });
   },
-  track: function(callback) {
+  track: function(pickupObject, callback) {
     const tmpGeofence = [
       [34.11392514038074,  -118.06329412159427],
       [34.114062266352775, -118.06331893202777],
@@ -41,37 +41,11 @@ const Navigator = {
       return callback({ message: ERROR.PLATFORM }, {});
     }
 
-    return navigator.geolocation.watchPosition(
-      (position) => {
-        if (!position || !position.coords) {
-          return callback({ message: ERROR.POSITION }, {});
-        }
-
-        const { latitude, longitude, accuracy } = position.coords;
-
-        if (hasArrived([latitude, longitude], tmpGeofence)) {
-          return callback(null, { latitude, longitude, accuracy, state: 'detectedArrival' });
-        } else {
-          return callback(null, { latitude, longitude, accuracy, state: 'onTheWay' });
-        }
-      },
-      (err) => {
-        if (err && err.code && err.code === 1) {
-          return callback({ message: ERROR.PERMISSION }, {});
-        }
-
-        return callback({ message: ERROR.GET_CURRENT_POSITION }, {});
-      },
-      {
-        enableHighAccuracy: true,
-        distanceFilter: 1,
-      }
-    );
-  },
-  watchPosition: function(callback) {
-    if (typeof navigator === 'undefined' || !navigator.geolocation) {
-      return callback({ message: ERROR.PLATFORM }, {});
-    }
+    /*
+      Calls `onTheWay` and `placeFetch` with the pickupObject
+      if success, save geofence in localstorage and continue,
+      else return callback({ message: ERROR }, {});
+    */
 
     return navigator.geolocation.watchPosition(
       (position) => {
@@ -86,9 +60,13 @@ const Navigator = {
 
         const { latitude, longitude, accuracy } = position.coords;
 
-        Logs_Client.create({ latitude, longitude, accuracy, time: new Date().toISOString() });
+        //Logs_Client.create({ latitude, longitude, accuracy, time: new Date().toISOString() });
 
-        return callback(null, { latitude, longitude, accuracy });
+        if (hasArrived([latitude, longitude], tmpGeofence)) {
+          return callback(null, { latitude, longitude, accuracy, state: 'detectedArrival' });
+        } else {
+          return callback(null, { latitude, longitude, accuracy, state: 'onTheWay' });
+        }
       },
       (err) => {
         if (err && err.code && err.code === 1) {

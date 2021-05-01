@@ -58,19 +58,20 @@ const Gimbal = {
         return callback(error, {});
       });
   },
-  watchLocation: function(callback=defaultCallback) {
+  startMonitoring: function(pickupObject, callback=defaultCallback) {
     if (!Cookie.get('gimbal-sdk-host')) {
       return callback({ message: ERROR.HOST_NAME }, {});
     }
 
-    return Navigator.watchPosition(callback)
-  },
-  startMonitoring: function(callback=defaultCallback) {
-    if (!Cookie.get('gimbal-sdk-host')) {
-      return callback({ message: ERROR.HOST_NAME }, {});
+    if ( !pickupObject
+        || (typeof pickupObject.identifier !== 'string')
+        || (!Array.isArray(pickupObject.placeIdentifiers))
+        || (pickupObject.placeIdentifiers.some(pid => typeof pid !== 'string')) )
+    {
+      return callback({ message: ERROR.PICKUP_OBJECT }, {});
     }
 
-    return Navigator.track(callback);
+    return Navigator.track(pickupObject, callback);
   },
   clearWatchLocation: function(id) {
     Navigator.clearWatchLocation(id);

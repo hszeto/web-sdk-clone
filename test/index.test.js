@@ -65,7 +65,7 @@ describe('Gimbal', () => {
     });
   });
 
-  describe('start', () => {
+  describe('getLocation', () => {
     context('when success', () => {
       beforeEach(() => {
         global.document = {

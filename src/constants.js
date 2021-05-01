@@ -2,6 +2,7 @@ const ERROR = {
   GET_CURRENT_POSITION: 'Error getting the current position.',
   HOST_NAME: 'Host name required.',
   PERMISSION: 'Permission denied!',
+  PICKUP_OBJECT: 'Pickup object required.',
   PLATFORM: 'The platform is not supported.',
   POSITION: 'Cannot locate the current position.',
   SERVER: 'Server Error'
